@@ -49,7 +49,7 @@ const Login = ({ onLoginSuccess }) => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="block text-xs font-semibold text-dark-muted tracking-wider uppercase mb-1.5">Username</label>
+            <label className="block text-xs font-semibold text-dark-muted tracking-wider uppercase mb-1.5">Username or Email</label>
             <div className="relative">
               <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-dark-muted">
                 <User className="h-4 w-4" />
@@ -60,7 +60,7 @@ const Login = ({ onLoginSuccess }) => {
                 onChange={(e) => setUsername(e.target.value)}
                 required
                 className="w-full bg-dark-bg/80 border border-dark-border rounded-xl py-2.5 pl-10 pr-4 text-sm text-white placeholder-dark-muted focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-colors"
-                placeholder="Enter admin or operator username"
+                placeholder="Enter username or email address"
               />
             </div>
           </div>
@@ -95,7 +95,7 @@ const Login = ({ onLoginSuccess }) => {
 
         <div className="mt-8 pt-6 border-t border-dark-border/40 text-center">
           <p className="text-[11px] text-dark-muted font-mono bg-dark-bg/60 border border-dark-border px-3 py-1.5 rounded-lg inline-block">
-            Default credentials: <span className="text-white">admin / admin123</span>
+            Default credentials: <span className="text-white">admin@fraudshield.ai</span> / <span className="text-white">admin123</span>
           </p>
         </div>
       </div>

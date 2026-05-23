@@ -50,19 +50,21 @@ class AuthController {
     const { username, password } = req.body;
 
     if (!username || !password) {
-      return res.status(400).json({ success: false, message: 'Please provide username and password.' });
+      return res.status(400).json({ success: false, message: 'Please provide username/email and password.' });
     }
 
     try {
-      const user = await UserModel.findOne({ username });
+      const isEmail = username.includes('@');
+      const searchKey = isEmail ? { email: username } : { username };
+      const user = await UserModel.findOne(searchKey);
       if (!user) {
-        return res.status(400).json({ success: false, message: 'Invalid username or password.' });
+        return res.status(400).json({ success: false, message: 'Invalid username, email, or password.' });
       }
 
       // Check password
       const isMatch = await UserModel.comparePassword(password, user.password);
       if (!isMatch) {
-        return res.status(400).json({ success: false, message: 'Invalid username or password.' });
+        return res.status(400).json({ success: false, message: 'Invalid username, email, or password.' });
       }
 
       if (user.status === 'suspended') {
