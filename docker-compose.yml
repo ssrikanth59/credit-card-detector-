@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: fraudshield-db
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+    networks:
+      - fraud-network
+
+  ml-service:
+    build: ./ml-service
+    container_name: fraudshield-ml
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    networks:
+      - fraud-network
+    depends_on:
+      - mongodb
+
+  backend:
+    build: ./backend
+    container_name: fraudshield-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - PORT=5000
+      - MONGO_URI=mongodb://mongodb:27017/fraud_detection
+      - ML_SERVICE_URL=http://ml-service:8000/predict
+      - JWT_SECRET=super_secret_fraud_shield_key
+      - TELEGRAM_BOT_TOKEN=
+      - TELEGRAM_CHAT_ID=
+      - NODE_ENV=production
+    networks:
+      - fraud-network
+    depends_on:
+      - mongodb
+      - ml-service
+
+  frontend:
+    build: ./frontend
+    container_name: fraudshield-frontend
+    ports:
+      - "3000:80"
+    environment:
+      - VITE_API_URL=http://localhost:5000/api
+    networks:
+      - fraud-network
+    depends_on:
+      - backend
+
+volumes:
+  mongo-data:
+
+networks:
+  fraud-network:
+    driver: bridge
